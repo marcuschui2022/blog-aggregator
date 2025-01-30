@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/marcuschui2022/blog-aggregator/internal/config"
 	"log"
 	"os"
@@ -42,5 +43,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Println(appState.cfg.CurrentUserName)
 
 }
