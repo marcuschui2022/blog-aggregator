@@ -1,10 +1,10 @@
 -- +goose Up
 CREATE TABLE users
 (
-    id         uuid,
-    created_at timestamp,
-    update_at  timestamp,
-    name       text unique
+    id         uuid primary key ,
+    created_at timestamp not null ,
+    updated_at  timestamp not null ,
+    name       text unique not null
 );
 
 -- +goose Down
