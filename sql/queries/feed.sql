@@ -4,11 +4,12 @@ values ($1, $2, $3, $4, $5, $6)
 returning *;
 
 -- name: GetFeeds :many
-select f.name, f.url, u.name as username
+select f.*, u.name as user_name
 from feeds f
          inner join users u
                     on f.user_id = u.id;
 
 -- name: GetFeedByURL :one
-select * from feeds
-where url =$1;
+select *
+from feeds
+where url = $1;

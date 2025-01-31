@@ -38,10 +38,7 @@ func handlerAddFeed(s *state, cmd command) error {
 		return fmt.Errorf("failed to create feed: %w", err)
 	}
 
-	fmt.Println("feed created successfully!")
-	printFeed(feed)
-
-	_, err = s.db.CreateFeedFollow(ctx, database.CreateFeedFollowParams{
+	feedFollow, err := s.db.CreateFeedFollow(ctx, database.CreateFeedFollowParams{
 		ID:        uuid.New(),
 		CreatedAt: now,
 		UpdatedAt: now,
@@ -52,17 +49,13 @@ func handlerAddFeed(s *state, cmd command) error {
 	if err != nil {
 		return fmt.Errorf("failed to create feed follow: %w", err)
 	}
+	fmt.Println("feed created successfully!")
+	printFeed(feed, user)
+	fmt.Println()
 
+	fmt.Println("feed followed successfully:")
+	printFeedFollow(feedFollow.UserName, feedFollow.FeedName)
 	return nil
-}
-
-func printFeed(feed database.Feed) {
-	fmt.Printf("* ID:            %s\n", feed.ID)
-	fmt.Printf("* Created:       %v\n", feed.CreatedAt)
-	fmt.Printf("* Updated:       %v\n", feed.UpdatedAt)
-	fmt.Printf("* Name:          %s\n", feed.Name)
-	fmt.Printf("* URL:           %s\n", feed.Url)
-	fmt.Printf("* UserID:        %s\n", feed.UserID)
 }
 
 func handlerListFeeds(s *state, cmd command) error {
@@ -79,7 +72,25 @@ func handlerListFeeds(s *state, cmd command) error {
 	}
 
 	for _, feed := range feeds {
-		fmt.Printf("%s %s %s\n", feed.Name, feed.Username, feed.Url)
+		printLiseFeedRow(feed)
 	}
 	return nil
+}
+
+func printLiseFeedRow(feed database.GetFeedsRow) {
+	fmt.Printf("* ID:            %s\n", feed.ID)
+	fmt.Printf("* Created:       %v\n", feed.CreatedAt)
+	fmt.Printf("* Updated:       %v\n", feed.UpdatedAt)
+	fmt.Printf("* Name:          %s\n", feed.Name)
+	fmt.Printf("* URL:           %s\n", feed.Url)
+	fmt.Printf("* User:          %s\n", feed.Name)
+}
+
+func printFeed(feed database.Feed, user database.User) {
+	fmt.Printf("* ID:            %s\n", feed.ID)
+	fmt.Printf("* Created:       %v\n", feed.CreatedAt)
+	fmt.Printf("* Updated:       %v\n", feed.UpdatedAt)
+	fmt.Printf("* Name:          %s\n", feed.Name)
+	fmt.Printf("* URL:           %s\n", feed.Url)
+	fmt.Printf("* User:          %s\n", user.Name)
 }
