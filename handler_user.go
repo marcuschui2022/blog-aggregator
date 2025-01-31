@@ -68,7 +68,7 @@ func printUser(user database.User) {
 	fmt.Printf(" * Name:    %v\n", user.Name)
 }
 
-func handlerGetUsers(s *state, cmd command) error {
+func handlerListUser(s *state, cmd command) error {
 	_ = cmd
 	ctx := context.Background()
 	users, err := s.db.GetUsers(ctx)

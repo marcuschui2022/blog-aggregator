@@ -52,15 +52,21 @@ func printFeed(feed database.Feed) {
 	fmt.Printf("* UserID:        %s\n", feed.UserID)
 }
 
-func handlerGetFeeds(s *state, cmd command) error {
+func handlerListFeeds(s *state, cmd command) error {
 	_ = cmd
 	ctx := context.Background()
 	feeds, err := s.db.GetFeeds(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get feeds: %w", err)
 	}
+
+	if len(feeds) == 0 {
+		fmt.Println("no feeds found")
+		return nil
+	}
+
 	for _, feed := range feeds {
-		fmt.Printf("* Name:%s URL:%s UserName:%s\n", feed.Name, feed.Url, feed.Username)
+		fmt.Printf("%s %s %s\n", feed.Name, feed.Username, feed.Url)
 	}
 	return nil
 }
