@@ -8,3 +8,7 @@ select f.name, f.url, u.name as username
 from feeds f
          inner join users u
                     on f.user_id = u.id;
+
+-- name: GetFeedByURL :one
+select * from feeds
+where url =$1;
