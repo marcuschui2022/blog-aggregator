@@ -5,7 +5,7 @@ CREATE TABLE feeds
     created_at timestamp   not null,
     updated_at timestamp   not null,
     name       text unique not null,
-    url        text        not null,
+    url text unique not null,
     user_id uuid not null REFERENCES users(id) on delete  cascade
 
 );
