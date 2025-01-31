@@ -12,5 +12,5 @@ returning *;
 select * from users
 where name = $1;
 
--- name: ResetUsers :exec
+-- name: DeleteUsers :exec
 delete from users;

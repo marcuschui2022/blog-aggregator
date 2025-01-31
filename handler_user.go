@@ -67,15 +67,3 @@ func printUser(user database.User) {
 	fmt.Printf(" * ID:      %v\n", user.ID)
 	fmt.Printf(" * Name:    %v\n", user.Name)
 }
-
-func handlerResetUsers(s *state, cmd command) error {
-	_ = cmd
-	ctx := context.Background()
-	err := s.db.ResetUsers(ctx)
-	if err != nil {
-		return fmt.Errorf("failed to reset users: %w", err)
-	}
-
-	fmt.Println("reset users successfully!")
-	return nil
-}

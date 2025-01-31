@@ -44,7 +44,7 @@ func main() {
 	}
 	cmds.register("login", handlerLogin)
 	cmds.register("register", handlerRegister)
-	cmds.register("reset", handlerResetUsers)
+	cmds.register("reset", handlerReset)
 
 	//get cli Args
 	args := os.Args
