@@ -67,3 +67,21 @@ func printUser(user database.User) {
 	fmt.Printf(" * ID:      %v\n", user.ID)
 	fmt.Printf(" * Name:    %v\n", user.Name)
 }
+
+func handlerGetUsers(s *state, cmd command) error {
+	_ = cmd
+	ctx := context.Background()
+	users, err := s.db.GetUsers(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get users: %w", err)
+	}
+
+	for _, user := range users {
+		if user.Name == s.cfg.CurrentUserName {
+			fmt.Printf("* %s (current)\n", user.Name)
+		} else {
+			fmt.Printf("* %s\n", user.Name)
+		}
+	}
+	return nil
+}
