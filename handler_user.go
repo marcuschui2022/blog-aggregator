@@ -8,20 +8,20 @@ import (
 	"time"
 )
 
-func handlerLogin(s *state, cmd command, user database.User) error {
+func handlerLogin(s *state, cmd command) error {
 	if len(cmd.Args) != 1 {
 		return fmt.Errorf("usage: %v <name>", cmd.Name)
 
 	}
-	//username := cmd.Args[0]
-	//
-	//ctx := context.Background()
-	//user, err := s.db.GetUser(ctx, username)
-	//if err != nil {
-	//	return fmt.Errorf("failed to find user: %w", err)
-	//}
+	username := cmd.Args[0]
 
-	err := s.cfg.SetUser(user.Name)
+	ctx := context.Background()
+	user, err := s.db.GetUser(ctx, username)
+	if err != nil {
+		return fmt.Errorf("failed to find user: %w", err)
+	}
+
+	err = s.cfg.SetUser(user.Name)
 	if err != nil {
 		return fmt.Errorf("failed to set current user: %w", err)
 	}
