@@ -19,7 +19,7 @@ func handlerFollow(s *state, cmd command, user database.User) error {
 
 	feed, err := s.db.GetFeedByURL(ctx, url)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to get feed: %w", err)
 	}
 
 	now := time.Now().UTC()
@@ -45,8 +45,7 @@ func handlerFollow(s *state, cmd command, user database.User) error {
 func handlerListFeedFollows(s *state, cmd command, user database.User) error {
 	_ = cmd
 
-	ctx := context.Background()
-	feedFollows, err := s.db.GetFeedFollowsForUser(ctx, user.ID)
+	feedFollows, err := s.db.GetFeedFollowsForUser(context.Background(), user.ID)
 	if err != nil {
 		return err
 	}
