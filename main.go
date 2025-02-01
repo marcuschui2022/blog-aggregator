@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	_ "github.com/lib/pq"
 	"github.com/marcuschui2022/blog-aggregator/internal/config"
 	"github.com/marcuschui2022/blog-aggregator/internal/database"
@@ -43,7 +44,7 @@ func main() {
 	cmds := commands{
 		registeredCommands: make(map[string]func(*state, command) error),
 	}
-	cmds.register("login", handlerLogin)
+	cmds.register("login", middlewareLoggedIn(handlerLogin))
 	cmds.register("register", handlerRegister)
 	cmds.register("reset", handlerReset)
 	cmds.register("users", handlerListUser)
@@ -52,6 +53,7 @@ func main() {
 	cmds.register("feeds", handlerListFeeds)
 	cmds.register("follow", middlewareLoggedIn(handlerFollow))
 	cmds.register("following", middlewareLoggedIn(handlerListFeedFollows))
+	cmds.register("unfollow", middlewareLoggedIn(handlerUnfollow))
 
 	//get cli Args
 	args := os.Args
@@ -80,4 +82,28 @@ func middlewareLoggedIn(handler func(s *state, cmd command, user database.User) 
 		}
 		return handler(s, cmd, user)
 	}
+}
+
+func handlerUnfollow(s *state, cmd command, user database.User) error {
+	if len(cmd.Args) != 1 {
+		return fmt.Errorf("usage: %v <url>", cmd.Name)
+	}
+
+	ctx := context.Background()
+	feedURL := cmd.Args[0]
+	feed, err := s.db.GetFeedByURL(ctx, feedURL)
+	if err != nil {
+		return fmt.Errorf("failed to get feed: %w", err)
+	}
+
+	err = s.db.DeleteFeedFollow(ctx, database.DeleteFeedFollowParams{
+		UserID: user.ID,
+		FeedID: feed.ID,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to delete feed follow: %w", err)
+	}
+	fmt.Println("feed unfollow successfully!")
+
+	return nil
 }
