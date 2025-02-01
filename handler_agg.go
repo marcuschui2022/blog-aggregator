@@ -6,7 +6,8 @@ import (
 )
 
 func handlerAgg(s *state, cmd command) error {
-	//_ = s
+	_ = s
+	_ = cmd
 	//if len(cmd.Args) != 1 {
 	//	return fmt.Errorf("usage: %v <url>", cmd.Name)
 	//

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func handlerFollow(s *state, cmd command) error {
+func handlerFollow(s *state, cmd command, user database.User) error {
 	if len(cmd.Args) != 1 {
 		return fmt.Errorf("usage: %v <url>", cmd.Name)
 	}
@@ -16,10 +16,6 @@ func handlerFollow(s *state, cmd command) error {
 	url := cmd.Args[0]
 
 	ctx := context.Background()
-	user, err := s.db.GetUser(ctx, s.cfg.CurrentUserName)
-	if err != nil {
-		return err
-	}
 
 	feed, err := s.db.GetFeedByURL(ctx, url)
 	if err != nil {
@@ -46,12 +42,8 @@ func handlerFollow(s *state, cmd command) error {
 	return nil
 }
 
-func handlerListFeedFollows(s *state, cmd command) error {
+func handlerListFeedFollows(s *state, cmd command, user database.User) error {
 	_ = cmd
-	user, err := s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
-	if err != nil {
-		return err
-	}
 
 	ctx := context.Background()
 	feedFollows, err := s.db.GetFeedFollowsForUser(ctx, user.ID)
