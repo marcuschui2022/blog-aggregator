@@ -31,8 +31,23 @@ Gator relies on PostgreSQL for data storage. Ensure you have PostgreSQL installe
   Download PostgreSQL from the [official website](https://www.postgresql.org/download/) and follow the installation steps for your operating system.
 
 ## Installation
-To install the Gator CLI, use the `go install` command:
-This command will download the latest version of Gator and install the executable in your `$GOPATH/bin` directory. Ensure that this directory is included in your system's `PATH` to run Gator from any location.
+To install the Gator CLI, follow these steps:
+
+1. **Build the Executable:**
+
+   ```shell script
+   go build -o gator
+   ```
+
+   This command builds the Gator executable and names it `gator`. Ensure that your module name initialized with `go mod init` matches your project structure.
+
+2. **Install the CLI:**
+
+   ```shell script
+   go install github.com/marcuschui2022/blog-aggregator@latest
+   ```
+
+   This command will download the latest version of Gator and install the executable in your `$GOPATH/bin` directory. Ensure that this directory is included in your system's `PATH` to run Gator from any location.
 
 ## Configuration
 Before running Gator, you need to set up the configuration file to connect to your PostgreSQL database.
@@ -180,7 +195,7 @@ This project is licensed under the [MIT License](LICENSE).
 3. **Run the CLI:**
 
    ```shell script
-   go run main.go <command> [arguments]
+   go run . <command> [arguments]
    ```
 
    Replace `<command>` and `[arguments]` with your desired commands as outlined above.
