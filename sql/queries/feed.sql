@@ -14,16 +14,17 @@ select *
 from feeds
 where url = $1;
 
--- name: MarkFeedFetched :exec
+-- name: MarkFeedFetched :one
 update feeds
-set updated_at      = $1,
-    last_fetched_at =$2
-where id = $3;
+set updated_at      = now(),
+    last_fetched_at =now()
+where id = $1
+returning *;
 
 -- name: GetNextFeedToFetch :one
 select *
 from feeds
 order by last_fetched_at
     nulls
-    first, last_fetched_at
+    first
 limit 1;
