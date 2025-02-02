@@ -13,3 +13,17 @@ from feeds f
 select *
 from feeds
 where url = $1;
+
+-- name: MarkFeedFetched :exec
+update feeds
+set updated_at      = $1,
+    last_fetched_at =$2
+where id = $3;
+
+-- name: GetNextFeedToFetch :one
+select *
+from feeds
+order by last_fetched_at
+    nulls
+    first, last_fetched_at
+limit 1;
